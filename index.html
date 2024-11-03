@@ -1,0 +1,512 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Nota de Venta</title>
+    <style>
+        @keyframes cambio {
+            0% { border-color: #78b9ff; }
+            100% { border-color: #007bff; }
+        }
+
+        body {
+            font-family: 'Roboto', Arial;
+            background-size: 100%;
+            background-position: center;
+            background-repeat: no-repeat;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            justify-content: center;
+            align-items: flex-start;
+            height: 100vh;
+            background-color: #f4f4f4;
+            overflow-y: auto;
+        }
+
+        .container {
+            border: 4px solid #007bff;
+            border-radius: 10px;
+            padding: 20px;
+            background-color: rgba(163, 162, 162, 0.241);
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            animation: cambio 15s infinite;
+            width: auto;
+        }
+
+        select, button, input[type="text"], input[type="date"],input[type="number"], input[type="tel"], input[type="email"],.input-total {
+            padding: 10px;
+            font-size: 16px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            margin: 10px 0;
+        }
+
+        button {
+            background-color: #007bff;
+            color: white;
+            cursor: pointer;
+        }
+
+        button:hover {
+            background-color: #0056b3;
+        }
+
+        .tabla-detalle {
+            width: 100%;
+            border-collapse: collapse;
+
+        }
+
+        .tabla-detalle th, .tabla-detalle td {
+            background-color: white;
+            border: 1px solid;
+            padding: 8px;
+            text-align: center;
+            animation: cambio 15s infinite;
+        }
+
+        @keyframes cambios {
+            0% { background-color: #78b9ff; }
+            100% { background-color: #007bff; }
+        }
+
+        .tabla-detalle th {
+            animation: cambios 15s infinite;
+        }
+
+        .encabezado, .detalle {
+            width: 100%;
+            margin-bottom: 20px;
+        }
+
+        .encabezado div {
+            display: flex;
+            justify-content: left;
+            align-items: center;
+        }
+        .input-total {
+            width: auto;
+            text-align: right;
+        }
+        .fecha {
+            display: flex;
+            margin-bottom: 10px;
+            border: 1px solid;
+            border-radius: 10px;
+            border-color: rgb(100, 100, 100);
+            justify-content: right;
+            
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+            <div class="fecha">
+                <div><label>Nro de Venta: <input type="text" id="nroVenta"></label></div>
+                <div><label>Fecha: <input type="date" id="fecha"></label></div>
+            </div>
+        <div class="encabezado">
+            <div><label>Cliente: <input type="text" id="cliente" required></label></div>
+            <div>
+                <label>Teléfono: <input type="tel" id="telefono" maxlength="8" required></label>
+                <label>Email: <input type="email" id="email" required></label>
+            </div>
+            <div><label>Dirección: <input type="text" id="direccion" required></label></div>
+        </div>
+        <table class="tabla-detalle">
+            <thead>
+                <tr>
+                    <th>Cant.</th>
+                    <th>Descripción</th>
+                    <th>Precio Unitario</th>
+                    <th>Subtotal</th>
+                </tr>
+            </thead>
+            <tbody>
+                <script>
+                    const productos = [
+                        { 
+                            nombre: "Gigabyte RTX™ 4060 EAGLE OC 8G GDDR6 DLSS3", 
+                            precio: 4050, 
+                            imagen: "img/imagen1.jpg", 
+                            ds:
+                            `<h2>Especificaciones:</h2>
+                            <ul>
+                                <li>Procesamiento de gráficos GeForce RTX™ 4060</li>
+                                <li>Reloj de núcleo 2505 MHz (Reference card: 2460 MHz)</li>
+                                <li>Núcleos CUDA® 3072</li>
+                                <li>Reloj de la memoria 17 Gb/s</li>
+                                <li>Tamaño de la memoria 8 GB</li>
+                                <li>Tipo de memoria GDDR6</li>
+                                <li>Bus de memoria 128 bits</li>
+                                <li>Tarjeta de autobús PCI-E 4.0</li>
+                                <li>Resolución máxima digital 7680×4320</li>
+                                <li>Vista múltiple 4</li>
+                                <li>Tamaño de la tarjeta L=272 W=115 H=40 mm</li>
+                                <li>Forma de placa de circuito impreso ATX</li>
+                                <li>DirectX 12 último</li>
+                                <li>OpenGL 4.6</li>
+                                <li>Fuente de alimentación recomendada 450W</li>
+                                <li>Conectores de alimentación 8 pines * 1</li>
+                            </ul>`
+                        },
+                        { 
+                            nombre: "MSI GeForce RTX™ 3060 Ti Gaming X 8GB, GDDR6", 
+                            precio: 3550, 
+                            imagen: "img/imagen2.jpg", 
+                            ds: 
+                            `<h2>Especificaciones:</h2>
+                            <ul>
+                            <li><strong>Procesador</strong>
+                            <ul>
+                            <li>CUDA: Si</li>
+                            <li>Núcleos CUDA: 4864</li>
+                            <li>Familia de procesadores de gráficos: NVIDIA</li>
+                            <li>Procesador gráfico: GeForce RTX 3060 Ti</li>
+                            <li>Aumento de la velocidad de reloj del procesador: 1770 MHz</li>
+                            <li>Máxima resolución: 7680 x 4320 Pixeles</li>
+                            <li>Máximas pantallas por tarjeta de video: 4</li>
+                            </ul>
+                            </li>
+                            </ul>
+                            <ul>
+                            <li><strong>Memoria</strong>
+                            <ul>
+                            <li>Capacidad memoria de adaptador gráfico: 8 GB</li>
+                            <li>Tipo de memoria de adaptador gráfico: GDDR6</li>
+                            <li>Ancho de datos: 256 bit</li>
+                            <li>Velocidad de transferencia de datos: 14 Gbit/s</li>
+                            </ul>
+                            </li>
+                            </ul>
+                            <ul>
+                            <li><strong>Puertos e Interfaces</strong>
+                            <ul>
+                            <li>Tipo de interfaz: PCI Express x16 4.0</li>
+                            <li>Número de puertos HDMI: 1</li>
+                            <li>Versión HDMI: 2.1</li>
+                            <li>Cantidad de DisplayPorts: 3</li>
+                            <li>Versión de DisplayPort: 1.4a</li>
+                            </ul>
+                            </li>
+                            </ul>
+                            <ul>
+                            <li><strong>Desempeño</strong>
+                            <ul>
+                            <li>Sintonizador de TV integrado: No</li>
+                            <li>Versión DirectX: 12.0</li>
+                            <li>Versión OpenGL: 4.6</li>
+                            <li>Listo para realidad virtual (RV): Si</li>
+                            <li>HDCP: Si</li>
+                            <li>Dual Link DVI: No</li>
+                            <li>NVIDIA G-SYNC: Si</li>
+                            </ul>
+                            </li>
+                            </ul>
+                            <ul>
+                            <li><strong>Diseño</strong>
+                            <ul>
+                            <li>Tipo de enfriamiento: Activo</li>
+                            <li>Tecnología de enfriamiento: MSI TORX Fan 4.0</li>
+                            <li>Número de ventiladores: 2 Ventilador(es)</li>
+                            <li>Iluminación: Si</li>
+                            <li>Iluminación de color: Multi</li>
+                            <li>Color del producto: Negro</li>
+                            </ul>
+                            </li>
+                            </ul>
+                            <ul>
+                            <li><strong>Control de energía</strong>
+                            <ul>
+                            <li>Suministro de energía al sistema mínimo: 600 W</li>
+                            <li>Consumo energético: 220 W</li>
+                            <li>Conectores de energia suplementario: 1x 6-pin, 1x 8-pin</li>
+                            </ul>
+                            </li>
+                            </ul>`
+                        },
+                        { 
+                            nombre: "Gigabyte RTX™ 4060 Windforce OC 8GB", 
+                            precio: 3900, 
+                            imagen: "img/imagen3.jpg", 
+                            ds:
+                            `<h2>Especificaciones:</h2>
+                                <ul>
+                                    <li>Procesamiento de gráficos GeForce RTX™ 4060</li>
+                                    <li>Reloj de núcleo 2475 MHz (Tarjeta de referencia: 2460 MHz)</li>
+                                    <li>Núcleos CUDA® 3072</li>
+                                    <li>Reloj de la memoria 17 Gb/s</li>
+                                    <li>Tamaño de la memoria 8 GB</li>
+                                    <li>Tipo de memoria GDDR6</li>
+                                    <li>Bus de memoria 128 bits</li>
+                                    <li>Tarjeta de autobús PCI-E 4.0</li>
+                                    <li>Resolución máxima digital 7680×4320</li>
+                                    <li>Vista múltiple 4</li>
+                                    <li>Tamaño de la tarjeta Largo=192 Ancho=120 Alto=41 mm</li>
+                                    <li>Forma de placa de circuito impreso ATX</li>
+                                    <li>DirectX 12 último</li>
+                                    <li>OpenGL 4.6</li>
+                                    <li>Fuente de alimentación recomendada 450W</li>
+                                    <li>Conectores de alimentación 8 pines * 1</li>
+                                </ul>`
+                        },
+                        { 
+                            nombre: "MSI GeForce RTX 2060 SUPER Ventus GP OC 8GB GDDR6", 
+                            precio: 2650, 
+                            imagen: "img/imagen4.jpg", 
+                            ds: 
+                            `<h2>Especificaciones:</h2>
+                                <ul>
+                                <li>Procesador
+                                <ul>
+                                <li>Familia de procesadores de gráficos: NVIDIA</li>
+                                </ul>
+                                <ul>
+                                <li>Procesador gráfico: GeForce RTX 2060 SUPER</li>
+                                </ul>
+                                <ul>
+                                <li>Máxima resolución: 7680 x 4320 Pixeles</li>
+                                </ul>
+                                <ul>
+                                <li>CUDA: Si</li>
+                                </ul>
+                                <ul>
+                                <li>Soporte para proceso paralelo: No compatible</li>
+                                </ul>
+                                <ul>
+                                <li>FireStream: No</li>
+                                </ul>
+                                <ul>
+                                <li>Núcleos CUDA: 2176</li>
+                                </ul>
+                                <ul>
+                                <li>Aumento de la velocidad de reloj del procesador: 1665 MHz</li>
+                                </ul>
+                                <ul>
+                                <li>Máximas pantallas por tarjeta de video: 4</li>
+                                </ul>
+                                </li>
+                                </ul>
+                                <ul>
+                                <li>Memoria
+                                <ul>
+                                <li>Capacidad memoria de adaptador gráfico: 8 GB</li>
+                                </ul>
+                                <ul>
+                                <li>Tipo de memoria de adaptador gráfico: GDDR6</li>
+                                </ul>
+                                <ul>
+                                <li>Ancho de datos: 256 bit</li>
+                                </ul>
+                                <ul>
+                                <li>Velocidad de transferencia de datos: 14 Gbit/s</li>
+                                </ul>
+                                </li>
+                                </ul>
+                                <ul>
+                                <li>Requisitos del sistema
+                                <ul>
+                                <li>Sistema operativo Windows soportado: Windows 10</li>
+                                </ul>
+                                </li>
+                                </ul>
+                                <ul>
+                                <li>Puertos e Interfaces
+                                <ul>
+                                <li>Tipo de interfaz: PCI Express x16 3.0</li>
+                                </ul>
+                                <ul>
+                                <li>Número de puertos HDMI: 1</li>
+                                </ul>
+                                <ul>
+                                <li>Cantidad de DisplayPorts: 3</li>
+                                </ul>
+                                <ul>
+                                <li>Versión HDMI: 2.0b</li>
+                                </ul>
+                                <ul>
+                                <li>Versión de DisplayPort: 1.4</li>
+                                </ul>
+                                </li>
+                                </ul>
+                                <ul>
+                                <li>Peso y dimensiones
+                                <ul>
+                                <li>Peso: 728 g</li>
+                                </ul>
+                                <ul>
+                                <li>Profundidad: 42 mm</li>
+                                </ul>
+                                <ul>
+                                <li>Altura: 127 mm</li>
+                                </ul>
+                                <ul>
+                                <li>Ancho: 232 mm</li>
+                                </ul>
+                                </li>
+                                </ul>
+                                <ul>
+                                <li>Control de energía
+                                <ul>
+                                <li>Suministro de energía al sistema mínimo: 550 W</li>
+                                </ul>
+                                <ul>
+                                <li>Consumo energético: 184 W</li>
+                                </ul>
+                                <ul>
+                                <li>Conectores de energia suplementario: 1x 8-pin</li>
+                                </ul>
+                                </li>
+                                </ul>
+                                <ul>
+                                <li>Diseño
+                                <ul>
+                                <li>Tipo de enfriamiento: Activo</li>
+                                </ul>
+                                <ul>
+                                <li>Número de ventiladores: 2 Ventilador(es)</li>
+                                </ul>
+                                <ul>
+                                <li>Factor de forma: ATX</li>
+                                </ul>
+                                <ul>
+                                <li>Número de ranuras: 2</li>
+                                </ul>
+                                <ul>
+                                <li>Color del producto: Negro, Gris</li>
+                                </ul>
+                                </li>
+                                </ul>
+                                <ul>
+                                <li>Desempeño
+                                <ul>
+                                <li>PhysX: Si</li>
+                                </ul>
+                                <ul>
+                                <li>Sintonizador de TV integrado: No</li>
+                                </ul>
+                                <ul>
+                                <li>Versión DirectX: 12.0</li>
+                                </ul>
+                                <ul>
+                                <li>Versión OpenGL: 4.5</li>
+                                </ul>
+                                <ul>
+                                <li>HDCP: Si</li>
+                                </ul>
+                                <ul>
+                                <li>Dual Link DVI: No</li>
+                                </ul>
+                                <ul>
+                                <li>Listo para realidad virtual (RV): Si</li>
+                                </ul>
+                                <ul>
+                                <li>NVIDIA G-SYNC: Si</li>
+                                </ul>
+                                </li>
+                                </ul>` 
+                        },
+                        { 
+                            nombre: "Asrock Radeon™ RX 6900 XT OC Formula 16GB", 
+                            precio: 5900, 
+                            imagen: "img/imagen5.jpg", 
+                            ds: 
+                            `<h2>Especificaciones:</h2>
+                                <ul>
+                                    <li>Graphics Engine AMD Radeon™ RX 6900 XT Graphics</li>
+                                    <li>Bus Standard PCI® Express 4.0 x16</li>
+                                    <li>DirectX 12 Ultimate</li>
+                                    <li>OpenGL 4.6</li>
+                                    <li>Memory GDDR6 16GB</li>
+                                    <li>Engine Clock</li>
+                                    <li>Stream Processors 5120</li>
+                                    <li>Compute Units 80</li>
+                                    <li>Memory Clock 16 Gbps</li>
+                                    <li>Memory Interface 256-bit</li>
+                                    <li>Resolution Digital Max Resolution: 7680 x 4320</li>
+                                    <li>Interface</li>
+                                    <li>HDCP Yes</li>
+                                    <li>Multi-view 4</li>
+                                    <li>Recommended PSU 1000W</li>
+                                    <li>Power Connector 3 x 8-pin</li>
+                                    <li>Accessories</li>
+                                    <li>Dimensions 332x137x61mm, 3-slot</li>
+                                    <li>Net Weight 1784 g</li>
+                                </ul>` 
+                        }
+                    ];
+                
+                    function cambiarProducto(index) {
+                        const select = document.getElementsByClassName("descripcion")[index];
+                        const precioInput = document.getElementsByClassName("precio-unitario")[index];
+                        const imagenRef = document.getElementById(`imagen${index}`);
+                        const descripcionRef = document.getElementById(`descripcion${index}`);
+                        if (select.value !== "") {
+                            const productoSeleccionado = productos[select.value];
+                            precioInput.value = productoSeleccionado.precio;
+                            imagenRef.src = productoSeleccionado.imagen;
+                            descripcionRef.innerHTML = productoSeleccionado.ds;
+                            calcularSubtotal(index);
+                        } else {
+                            precioInput.value = 0;
+                            imagenRef.src = "img/img.jpg";
+                            descripcionRef.innerHTML = "Seleccione un Producto";
+                        }
+                    }
+
+                    function calcularSubtotal(index) {
+                        const cantidad = document.getElementsByClassName("cantidad")[index].value;
+                        const precioUnitario = document.getElementsByClassName("precio-unitario")[index].value;
+                        const subtotal = cantidad * precioUnitario;
+                        document.getElementsByClassName("subtotal")[index].value = subtotal;
+                
+                        calcularTotales();
+                    }
+                
+                    function calcularTotales() {
+                        let subtotalGeneral = 0;
+                        const subtotales = document.getElementsByClassName("subtotal");
+                        for (let i = 0; i < subtotales.length; i++) {
+                            subtotalGeneral += parseFloat(subtotales[i].value) || 0;
+                        }
+                
+                        document.getElementById("subTotal").value = subtotalGeneral.toFixed(2);
+                        document.getElementById("iva").value = (subtotalGeneral * 0.13).toFixed(2);
+                        document.getElementById("total").value = (subtotalGeneral * 1.13).toFixed(2);
+                    }
+                
+                    for (let i = 0; i < 5; i++) {
+                        document.write(`
+                            <tr>
+                                <td><input type="number" class="cantidad" min="1" value="0" onchange="calcularSubtotal(${i})"></td>
+                                <td>
+                                    <select class="descripcion" onchange="cambiarProducto(${i})">
+                                        <option value="">Seleccione un Producto</option>  <!-- Opción predeterminada -->
+                                        ${productos.map((p, index) => `<option value="${index}">${p.nombre}</option>`).join("")}
+                                    </select>
+                                    <div style="display: flex; flex-direction: column; align-items: center;">
+                                        <img class="imagen-ref" id="imagen${i}" src="img/img.jpg" alt="Imagen del producto" style="width: 200px; height: auto;">
+                                        <span id="descripcion${i}" style="margin-top: 5px;"></span>  <!-- Texto predeterminado -->
+                                    </div>
+                                </td>
+                                <td><input type="number" class="precio-unitario" value="0" readonly>Bs</td>
+                                <td><input type="number" class="subtotal" value="0" readonly>Bs</td>
+                            </tr>
+                        `);
+                    }
+                </script>
+            </tbody>
+        </table>
+        <div class="totales">
+            <div><label>Subtotal: <input type="number" id="subTotal" class="input-total" readonly>Bs</label></div>
+            <div><label>IVA (13%): <input type="number" id="iva" class="input-total" readonly>Bs</label></div>
+            <div><label>Total: <input type="number" id="total" class="input-total" readonly>Bs</label></div>
+        </div>
+        <div>
+            <legend style="border: 1px solid grey; border-radius:  10px;width: 100%; padding-bottom: 30px;">Expedido por:</legend>
+        </div>
+    </div>
+</body>
+</html>
